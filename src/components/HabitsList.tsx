@@ -15,9 +15,10 @@ interface HabitsInfo {
 
 interface HabitsListProps {
   date: Date;
+  onCompletedChanged: (completed: number) => void;
 }
 
-export const HabitsList = ({ date }: HabitsListProps) => {
+export const HabitsList = ({ date, onCompletedChanged }: HabitsListProps) => {
   const [habitsInfo, setHabitsInfo] = useState<HabitsInfo>();
 
   useEffect(() => {
@@ -51,6 +52,8 @@ export const HabitsList = ({ date }: HabitsListProps) => {
       possibleHabits: prevState!.possibleHabits,
       completedHabits,
     }));
+
+    onCompletedChanged(completedHabits.length);
   };
 
   const isDateInPast = dayjs(date).endOf('day').isBefore(new Date());
