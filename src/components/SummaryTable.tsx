@@ -21,9 +21,9 @@ type Summary = {
 export const SummaryTable = () => {
   const [summary, setSummary] = useState<Summary[]>([]);
 
-  useEffect(() => {}, [
-    api.get('summary').then((response) => setSummary(response.data)),
-  ]);
+  useEffect(() => {
+    api.get('summary').then((response) => setSummary(response.data));
+  }, []);
 
   return (
     <div className=" w-full flex ">
