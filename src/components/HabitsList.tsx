@@ -32,6 +32,27 @@ export const HabitsList = ({ date }: HabitsListProps) => {
       });
   }, []);
 
+  const handleToggleHabit = async (habitId: string) => {
+    await api.patch(`/habits/${habitId}/toggle`);
+
+    const isHabitAlreadyCompleted =
+      habitsInfo?.completedHabits.includes(habitId);
+
+    let completedHabits: string[] = [];
+
+    if (isHabitAlreadyCompleted) {
+      completedHabits = habitsInfo!.completedHabits.filter(
+        (id) => id !== habitId,
+      );
+    } else {
+      completedHabits = [...habitsInfo!.completedHabits, habitId];
+    }
+    setHabitsInfo((prevState) => ({
+      possibleHabits: prevState!.possibleHabits,
+      completedHabits,
+    }));
+  };
+
   const isDateInPast = dayjs(date).endOf('day').isBefore(new Date());
 
   return (
@@ -42,6 +63,7 @@ export const HabitsList = ({ date }: HabitsListProps) => {
           checked={habitsInfo.completedHabits.includes(habit.id)}
           disabled={isDateInPast}
           className="flex items-center gap-3 group"
+          onCheckedChange={() => handleToggleHabit(habit.id)}
         >
           <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-500">
             <Checkbox.Indicator>
